@@ -1,0 +1,163 @@
+import React, { useState, useEffect } from 'react';
+import { useGameStore } from '../../store/gameStore';
+import { useNavigate } from 'react-router-dom';
+import { ArrowRight, CreditCard, Globe, Banknote, ShieldCheck, Building, Link2 } from 'lucide-react';
+import clsx from 'clsx';
+
+type Item = {
+  id: string;
+  text: string;
+  icon?: React.ReactNode;
+  matchId: string;
+};
+
+const terms: Item[] = [
+  { id: 't1', text: 'Girocard', matchId: 'girocard', icon: <CreditCard className="w-5 h-5" /> },
+  { id: 't2', text: 'Lastschrift (Bankeinzug)', matchId: 'lastschrift', icon: <Building className="w-5 h-5" /> },
+  { id: 't3', text: 'PayPal', matchId: 'paypal', icon: <Globe className="w-5 h-5 text-blue-600" /> },
+  { id: 't4', text: 'Klarna / Payment-Dienstleister', matchId: 'klarna', icon: <Banknote className="w-5 h-5 text-pink-500" /> },
+  { id: 't5', text: 'Klassischer Kauf auf Rechnung', matchId: 'rechnung', icon: <Banknote className="w-5 h-5 text-slate-600" /> },
+  { id: 't6', text: 'Prepaid-Kreditkarte', matchId: 'prepaid', icon: <CreditCard className="w-5 h-5 text-orange-500" /> },
+];
+
+const definitions: Item[] = [
+  { id: 'd1', text: 'Standard-Karte der deutschen Banken. Geld wird sofort abgebucht. Im Ausland oft nicht nutzbar.', matchId: 'girocard' },
+  { id: 'd2', text: 'Du erlaubst dem Händler schriftlich, das Geld von deinem Konto abzubuchen (SEPA-Mandat).', matchId: 'lastschrift' },
+  { id: 'd3', text: 'Bezahldienst ab 18. Käuferschutz inklusive. Man braucht einen Account.', matchId: 'paypal' },
+  { id: 'd4', text: 'Ein Unternehmen bezahlt den Shop sofort für dich. Du zahlst später an das Unternehmen zurück (Factoring). Oft strenge Bonitätsprüfung.', matchId: 'klarna' },
+  { id: 'd5', text: 'Der Shop vertraut dir. Du bekommst die Ware und überweist das Geld innerhalb einer Frist (z.B. 14 Tage) selbst.', matchId: 'rechnung' },
+  { id: 'd6', text: 'Funktioniert wie eine echte Kreditkarte (Visa/Mastercard), muss aber vorher mit Guthaben aufgeladen werden. Kein Verschuldungsrisiko.', matchId: 'prepaid' },
+];
+
+export const PaymentMethodsPage: React.FC = () => {
+  const [selectedTerm, setSelectedTerm] = useState<string | null>(null);
+  const [matchedPairs, setMatchedPairs] = useState<string[]>([]); // Stores matchIds
+  const [wrongAttempt, setWrongAttempt] = useState<string | null>(null);
+  
+  const { completeModule } = useGameStore();
+  const navigate = useNavigate();
+
+  // Shuffle definitions once on mount
+  const [shuffledDefs, setShuffledDefs] = useState<Item[]>([]);
+  useEffect(() => {
+    setShuffledDefs([...definitions].sort(() => Math.random() - 0.5));
+  }, []);
+
+  const handleTermClick = (id: string) => {
+    if (matchedPairs.includes(terms.find(t => t.id === id)?.matchId || '')) return;
+    setSelectedTerm(id);
+    setWrongAttempt(null);
+  };
+
+  const handleDefClick = (id: string) => {
+    if (!selectedTerm) return;
+    
+    const term = terms.find(t => t.id === selectedTerm);
+    const def = definitions.find(d => d.id === id);
+    
+    if (term && def) {
+      if (term.matchId === def.matchId) {
+        setMatchedPairs([...matchedPairs, term.matchId]);
+        setSelectedTerm(null);
+      } else {
+        setWrongAttempt(id);
+        setTimeout(() => setWrongAttempt(null), 1000);
+      }
+    }
+  };
+
+  const handleFinish = () => {
+    completeModule('payment_methods');
+    navigate('/offline');
+  };
+
+  return (
+    <div className="max-w-6xl mx-auto animate-fade-in pb-12">
+      <div className="text-center mb-8">
+        <h2 className="text-2xl font-bold mb-2">Training: Wie bezahle ich?</h2>
+        <p className="text-slate-600 max-w-2xl mx-auto">
+          Verbinde den Begriff links mit der korrekten fachlichen Erklärung rechts.
+          <br/>Klicke zuerst auf den Begriff, dann auf die Erklärung.
+        </p>
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-start">
+        {/* Left Column: Terms */}
+        <div className="space-y-3">
+          <h3 className="font-bold text-slate-400 uppercase text-xs tracking-wider mb-2 pl-2">Zahlungsart</h3>
+          {terms.map((term) => {
+            const isMatched = matchedPairs.includes(term.matchId);
+            const isSelected = selectedTerm === term.id;
+            
+            return (
+              <button
+                key={term.id}
+                onClick={() => handleTermClick(term.id)}
+                disabled={isMatched}
+                className={clsx(
+                  "w-full p-4 rounded-xl border-2 text-left flex items-center gap-3 transition-all relative",
+                  isMatched ? "border-emerald-100 bg-emerald-50/50 opacity-60 saturate-0" : 
+                  isSelected ? "border-brand-500 bg-brand-50 ring-2 ring-brand-200 z-10 shadow-md" : "border-slate-200 bg-white hover:border-brand-300 hover:shadow-sm"
+                )}
+              >
+                <div className={clsx("p-2 rounded-lg transition-colors", isMatched ? "bg-slate-100" : "bg-slate-50")}>
+                  {term.icon}
+                </div>
+                <span className={clsx("font-bold text-lg", isMatched && "line-through decoration-slate-400 text-slate-500")}>
+                   {term.text}
+                </span>
+                {isMatched && <div className="absolute right-4 text-emerald-600"><Link2 className="w-5 h-5" /></div>}
+                {isSelected && <div className="absolute -right-3 bg-brand-500 w-6 h-6 rotate-45 transform origin-center"></div>} 
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Right Column: Definitions */}
+        <div className="space-y-3">
+          <h3 className="font-bold text-slate-400 uppercase text-xs tracking-wider mb-2 pl-2">Fachliche Erklärung</h3>
+          {shuffledDefs.map((def) => {
+             const isMatched = matchedPairs.includes(def.matchId);
+             const isWrong = wrongAttempt === def.id;
+
+             return (
+               <button
+                 key={def.id}
+                 onClick={() => handleDefClick(def.id)}
+                 disabled={isMatched}
+                 className={clsx(
+                   "w-full p-4 rounded-xl border-2 text-left transition-all h-full min-h-[90px] flex items-center",
+                   isMatched ? "border-emerald-100 bg-emerald-50/50 opacity-60 text-slate-400" : 
+                   isWrong ? "border-red-500 bg-red-50 animate-shake" : "border-slate-200 bg-white hover:border-brand-300 hover:shadow-sm"
+                 )}
+               >
+                 <div className="text-sm leading-relaxed">
+                   {def.text}
+                 </div>
+               </button>
+             );
+          })}
+        </div>
+      </div>
+
+      {matchedPairs.length === terms.length && (
+        <div className="mt-12 text-center animate-fade-in bg-white p-8 rounded-2xl shadow-lg border border-slate-100 max-w-2xl mx-auto">
+           <div className="inline-flex items-center justify-center p-4 bg-emerald-100 text-emerald-700 rounded-full mb-6">
+             <ShieldCheck className="w-10 h-10" />
+           </div>
+           <h3 className="text-2xl font-bold mb-2">Alles richtig zugeordnet!</h3>
+           <p className="text-slate-600 mb-8 text-lg">
+             Du kennst jetzt die Unterschiede zwischen echten Rechnungen, Dienstleistern wie Klarna und der klassischen Lastschrift.
+             Zeit, dieses Wissen anzuwenden.
+           </p>
+           <button
+              onClick={handleFinish}
+              className="px-10 py-4 bg-brand-600 text-white rounded-xl font-bold hover:bg-brand-700 flex items-center justify-center mx-auto shadow-lg hover:shadow-xl transition-all text-lg"
+            >
+              Weiter zum Einkauf (Offline) <ArrowRight className="ml-2 w-6 h-6" />
+            </button>
+        </div>
+      )}
+    </div>
+  );
+};

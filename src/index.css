@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-900 font-sans;
+  }
+}
+
+/* Custom utility for paper receipts */
+.receipt-paper {
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.receipt-jagged {
+  background: 
+    linear-gradient(135deg, transparent 5px, white 5px) top left, 
+    linear-gradient(225deg, transparent 5px, white 5px) top right, 
+    linear-gradient(315deg, transparent 5px, white 5px) bottom right, 
+    linear-gradient(45deg, transparent 5px, white 5px) bottom left;
+  background-size: 50% 50%;
+  background-repeat: repeat-x;
+}
+
+.handwriting {
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.paper-texture {
+  background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Flip Card Utilities */
+.perspective-1000 {
+  perspective: 1000px;
+}
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+.backface-hidden {
+  backface-visibility: hidden;
+}
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes bounceSmall {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.animate-bounce-small {
+  animation: bounceSmall 2s infinite;
+}
