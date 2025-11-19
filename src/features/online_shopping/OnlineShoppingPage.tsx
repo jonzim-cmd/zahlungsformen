@@ -205,8 +205,8 @@ export const OnlineShoppingPage: React.FC = () => {
 
       {step === 'payment' && (
         <div className="grid md:grid-cols-2 gap-8 items-start">
-           {/* Bank Data Helper Card */}
-           <div className="bg-slate-800 text-slate-200 p-6 rounded-xl shadow-lg h-fit sticky top-4">
+           {/* Bank Data Helper Card (non-sticky on this page to avoid overlay issues) */}
+           <div className="bg-slate-800 text-slate-200 p-6 rounded-xl shadow-lg h-fit">
               <div className="flex justify-between items-start mb-8">
                  <Building2 className="w-8 h-8 opacity-50" />
                  <span className="font-bold tracking-widest">{bankName}</span>
@@ -225,7 +225,7 @@ export const OnlineShoppingPage: React.FC = () => {
            </div>
 
           <div>
-            <div className="md:sticky md:top-24 z-10">
+            <div>
               <h2 className="text-xl font-bold mb-6">Zahlungsart wählen</h2>
               <div className="space-y-3 mb-6">
               {/* PayPal */}
