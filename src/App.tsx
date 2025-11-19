@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Layout } from './layout/Layout';
 
@@ -32,4 +31,3 @@ function App() {
 }
 
 export default App;
-

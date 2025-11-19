@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useGameStore, ModuleId } from '../store/gameStore';
 import { Wallet, CheckCircle, Map, RefreshCw } from 'lucide-react';
-import { clsx } from 'clsx';
 
 const modules: { id: ModuleId; label: string; path: string }[] = [
   { id: 'intro', label: 'Start', path: '/' },

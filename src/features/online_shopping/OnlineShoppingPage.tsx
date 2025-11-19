@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useGameStore } from '../../store/gameStore';
 import { useNavigate } from 'react-router-dom';
-import { ShoppingCart, CreditCard, Globe, Banknote, Truck, Lock, Check, ArrowRight, Building2, AlertCircle, Info } from 'lucide-react';
+import { ShoppingCart, CreditCard, Globe, Banknote, Truck, ArrowRight, Building2, AlertCircle, Info } from 'lucide-react';
 import clsx from 'clsx';
 
 export const OnlineShoppingPage: React.FC = () => {

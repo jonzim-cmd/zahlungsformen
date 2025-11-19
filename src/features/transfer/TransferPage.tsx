@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useGameStore } from '../../store/gameStore';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, RefreshCw, FileText, Wallet, Check } from 'lucide-react';
-import clsx from 'clsx';
 
 export const TransferPage: React.FC = () => {
   const [step, setStep] = useState<'intro' | 'form' | 'success'>('intro');
