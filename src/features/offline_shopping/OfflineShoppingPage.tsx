@@ -14,7 +14,6 @@ export const OfflineShoppingPage: React.FC = () => {
   const [receiptErrorFound, setReceiptErrorFound] = useState(false);
 
   // Cash Form State
-  const [formAmount, setFormAmount] = useState('');
   const [formText, setFormText] = useState('');
   const [formFrom, setFormFrom] = useState('');
   const [formReason, setFormReason] = useState('');
@@ -24,7 +23,6 @@ export const OfflineShoppingPage: React.FC = () => {
   const [formTax, setFormTax] = useState('');
   const [formTotal, setFormTotal] = useState('');
   const [signed, setSigned] = useState(false);
-  const [ustChecked, setUstChecked] = useState(false);
 
   const [showMathTip, setShowMathTip] = useState(false);
 
@@ -47,7 +45,6 @@ export const OfflineShoppingPage: React.FC = () => {
 
   const handleCashSubmit = () => {
     const errors = [];
-    if (!formAmount.includes('50')) errors.push("Betrag oben muss 50 sein.");
     
     if (!formFrom.toLowerCase().includes(userFirstName.toLowerCase())) errors.push("Falscher Geldgeber (von). Du zahlst die Kaution.");
     if (!formReason.toLowerCase().includes('kaution')) errors.push("Verwendungszweck ist unklar.");
@@ -66,8 +63,6 @@ export const OfflineShoppingPage: React.FC = () => {
       // Allow tolerance
       if (Math.abs(net * 0.19 - tax) > 0.1 && Math.abs(net - 42.02) > 0.05) errors.push("Die Steuer stimmt nicht (19%).");
     }
-
-    if (!ustChecked) errors.push("Bitte hake 19% MwSt an.");
 
     if (errors.length > 0) {
       alert('Korrekturen nötig:\n- ' + errors.join('\n- '));
@@ -249,18 +244,50 @@ export const OfflineShoppingPage: React.FC = () => {
               </div>
 
               <div className="space-y-8 font-mono text-lg">
-                <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                  <label className="w-32 font-bold text-right text-sm text-slate-500 uppercase tracking-wider">Betrag</label>
-                  <div className="relative flex-1 flex items-center gap-2">
-                    <input 
-                      type="text" 
-                      value={formAmount}
-                      onChange={(e) => setFormAmount(e.target.value)}
-                      className="w-40 p-2 border-b-2 border-dotted border-slate-400 bg-transparent focus:outline-none focus:border-brand-500 font-handwriting text-2xl font-bold text-slate-900"
-                      placeholder="0,00"
-                    />
-                    <span className="font-bold text-xl">EUR</span>
+                {/* Calculation Section (moved up) */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center border-b border-dotted border-slate-400 pb-1">
+                      <span className="text-sm font-bold text-slate-600">Nettobetrag:</span>
+                      <div className="flex items-center">
+                        <input 
+                          className="w-32 bg-transparent text-right font-handwriting text-2xl p-1 focus:outline-none" 
+                          placeholder="0,00"
+                          value={formNetto}
+                          onChange={(e) => setFormNetto(e.target.value)}
+                        />
+                        <span className="ml-2 text-sm">EUR</span>
+                      </div>
+                    </div>
+                    <div className="flex justify-between items-center border-b border-dotted border-slate-400 pb-1">
+                      <div className="flex items-center gap-2 text-sm font-bold text-slate-600">
+                        <span>+</span>
+                        <span>USt</span>
+                      </div>
+                      <div className="flex items-center">
+                        <input 
+                          className="w-32 bg-transparent text-right font-handwriting text-2xl p-1 focus:outline-none" 
+                          placeholder="0,00"
+                          value={formTax}
+                          onChange={(e) => setFormTax(e.target.value)}
+                        />
+                        <span className="ml-2 text-sm">EUR</span>
+                      </div>
+                    </div>
+                    <div className="flex justify-between items-center border-b-4 border-double border-slate-800 pt-2">
+                      <span className="text-sm font-black uppercase tracking-wider">Gesamtbetrag:</span>
+                      <div className="flex items-center font-bold">
+                        <input 
+                          className="w-32 bg-transparent text-right font-handwriting text-2xl p-1 focus:outline-none font-bold" 
+                          placeholder="0,00"
+                          value={formTotal}
+                          onChange={(e) => setFormTotal(e.target.value)}
+                        />
+                        <span className="ml-2 text-sm">EUR</span>
+                      </div>
+                    </div>
                   </div>
+                  <div className="hidden md:block" />
                 </div>
 
                 <div className="flex flex-col sm:flex-row sm:items-center gap-4">
@@ -269,7 +296,7 @@ export const OfflineShoppingPage: React.FC = () => {
                     type="text" 
                     value={formText}
                     onChange={(e) => setFormText(e.target.value)}
-                    placeholder="Betrag in Worten"
+                    placeholder="Betrag in Worten ohne Cent"
                     className="flex-1 p-2 border-b-2 border-dotted border-slate-400 bg-transparent focus:outline-none focus:border-brand-500 font-handwriting text-xl text-slate-900"
                   />
                 </div>
@@ -280,7 +307,7 @@ export const OfflineShoppingPage: React.FC = () => {
                     type="text" 
                     value={formFrom}
                     onChange={(e) => setFormFrom(e.target.value)}
-                    placeholder="Vorname Nachname"
+                    placeholder="Geldgeber"
                     className="flex-1 p-2 border-b-2 border-dotted border-slate-400 bg-transparent focus:outline-none focus:border-brand-500 font-handwriting text-xl text-slate-900"
                   />
                 </div>
@@ -296,58 +323,8 @@ export const OfflineShoppingPage: React.FC = () => {
                   />
                 </div>
 
-                {/* Calculation Section */}
-                <div className="border-t-2 border-slate-300 pt-8 mt-8 grid grid-cols-1 md:grid-cols-2 gap-12">
-                   <div className="space-y-4">
-                      <div className="flex justify-between items-center border-b border-dotted border-slate-400 pb-1">
-                         <span className="text-sm font-bold text-slate-600">Nettobetrag:</span>
-                         <div className="flex items-center">
-                            <input 
-                               className="w-24 bg-transparent text-right font-handwriting text-xl p-1 focus:outline-none" 
-                               placeholder="0,00"
-                               value={formNetto}
-                               onChange={(e) => setFormNetto(e.target.value)}
-                            />
-                            <span className="ml-2 text-sm">EUR</span>
-                         </div>
-                      </div>
-                      <div className="flex justify-between items-center border-b border-dotted border-slate-400 pb-1">
-                         <div className="flex items-center gap-2 text-sm font-bold text-slate-600">
-                            <span>+</span>
-                            <label className="flex items-center gap-2 cursor-pointer hover:text-black">
-                              <input 
-                                type="checkbox" 
-                                checked={ustChecked} 
-                                onChange={(e) => setUstChecked(e.target.checked)}
-                                className="w-4 h-4 rounded border-gray-300 text-brand-600 focus:ring-brand-500"
-                              /> 
-                              19% USt
-                            </label>
-                         </div>
-                         <div className="flex items-center">
-                            <input 
-                               className="w-24 bg-transparent text-right font-handwriting text-xl p-1 focus:outline-none" 
-                               placeholder="0,00"
-                               value={formTax}
-                               onChange={(e) => setFormTax(e.target.value)}
-                            />
-                            <span className="ml-2 text-sm">EUR</span>
-                         </div>
-                      </div>
-                      <div className="flex justify-between items-center border-b-4 border-double border-slate-800 pt-2">
-                         <span className="text-sm font-black uppercase tracking-wider">Gesamtbetrag:</span>
-                         <div className="flex items-center font-bold">
-                            <input 
-                               className="w-24 bg-transparent text-right font-handwriting text-xl p-1 focus:outline-none font-bold" 
-                               placeholder="0,00"
-                               value={formTotal}
-                               onChange={(e) => setFormTotal(e.target.value)}
-                            />
-                            <span className="ml-2 text-sm">EUR</span>
-                         </div>
-                      </div>
-                   </div>
-
+                {/* Signature and date */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                    <div className="flex flex-col justify-end space-y-6">
                       <div className="flex gap-2 items-end">
                           <input 

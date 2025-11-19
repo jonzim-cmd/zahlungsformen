@@ -225,9 +225,9 @@ export const OnlineShoppingPage: React.FC = () => {
            </div>
 
           <div>
-            <h2 className="text-xl font-bold mb-6">Zahlungsart wählen</h2>
-            
-            <div className="space-y-3 mb-6">
+            <div className="md:sticky md:top-24 z-10">
+              <h2 className="text-xl font-bold mb-6">Zahlungsart wählen</h2>
+              <div className="space-y-3 mb-6">
               {/* PayPal */}
               <div 
                 onClick={() => handleMethodSelect('paypal')}
@@ -289,6 +289,7 @@ export const OnlineShoppingPage: React.FC = () => {
               >
                 <Building2 className="w-6 h-6 text-brand-600" />
                 <span className="font-bold">Lastschrift (Bankeinzug)</span>
+              </div>
               </div>
             </div>
 

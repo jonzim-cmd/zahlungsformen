@@ -219,7 +219,7 @@ export const GirokontoPage: React.FC = () => {
         <div className="space-y-6">
           <h2 className="text-2xl font-bold text-center">Welche Bank passt zu dir?</h2>
           <p className="text-center text-slate-600 max-w-2xl mx-auto">
-            Du hast die Wahl. Achte auf Gebühren und Leistungen. Da du Schüler bist, solltest du nichts für die Kontoführung zahlen müssen.
+            Du hast die Wahl.
           </p>
           
           <div className="grid gap-6 md:grid-cols-3 mt-8">
