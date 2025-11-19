@@ -56,7 +56,7 @@ export const Layout: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
       {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-50">
+      <header className="bg-white shadow-sm sticky top-0 z-50" style={{ overflowAnchor: 'none' }}>
         <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center space-x-2 cursor-pointer" onClick={() => navigate('/')}>
             <div className="w-8 h-8 bg-brand-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">
@@ -95,7 +95,7 @@ export const Layout: React.FC = () => {
       </header>
 
       {/* Progress Bar */}
-      <div className="w-full bg-slate-200 h-1.5">
+      <div className="w-full bg-slate-200 h-1.5" style={{ overflowAnchor: 'none' }}>
         <div 
           className="bg-brand-600 h-1.5 transition-all duration-500 ease-out"
           style={{ width: `${Math.min(100, (completedModules.length / modules.length) * 100)}%` }}
