@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useGameStore } from '../../store/gameStore';
 import { useNavigate } from 'react-router-dom';
-import { ShoppingCart, CreditCard, Globe, Banknote, Truck, ArrowRight, Building2, AlertCircle, Info } from 'lucide-react';
+import { ShoppingCart, CreditCard, Globe, Banknote, Truck, ArrowRight, Building2, AlertCircle } from 'lucide-react';
 import clsx from 'clsx';
 
 export const OnlineShoppingPage: React.FC = () => {
@@ -222,10 +222,6 @@ export const OnlineShoppingPage: React.FC = () => {
                  </div>
               </div>
               <div className="text-sm uppercase tracking-widest">{fullName}</div>
-              <div className="text-xs mt-4 pt-4 border-t border-slate-700 text-slate-500 flex gap-2">
-                 <Info className="w-4 h-4" />
-                 Dies sind deine echten Spieldaten. Du wirst sie brauchen.
-              </div>
            </div>
 
           <div>

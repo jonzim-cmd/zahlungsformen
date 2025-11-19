@@ -16,9 +16,10 @@ export const ReflectionPage: React.FC = () => {
     t2: false, // Supermarkt
     t3: false, // Bargeld
     t4: false, // Party Shop
-    t5: false, // Spotify check
+    t5: false, // Unerwartete Abbuchungen
     t6: false  // Kaution
   });
+  const [statementNotes, setStatementNotes] = useState('');
 
   const transactions = [
     { id: 'tx1', date: '01.06.', recipient: 'Eltern (Geburtstag)', type: 'Gutschrift', amount: 200.00 },
@@ -53,7 +54,8 @@ export const ReflectionPage: React.FC = () => {
                 <CheckSquare className="w-6 h-6" /> Prüfung:
               </h2>
               <p className="mb-4 font-sans text-sm font-bold">
-                Szenario: Du hast dein Spotify-Abo letzten Monat gekündigt. Prüfe, ob trotzdem abgebucht wurde!
+                Szenario: Du hast noch nie einen Kontoauszug gesehen und willst besonders genau sein. 
+                Prüfe ihn aufmerksam und vergleiche alles mit deinen Notizen.
               </p>
               
               <div className="space-y-2 font-sans text-sm">
@@ -75,12 +77,23 @@ export const ReflectionPage: React.FC = () => {
                  </label>
                  <label className="flex items-center gap-2 cursor-pointer hover:bg-yellow-200/50 p-1 rounded">
                     <input type="checkbox" checked={checklist.t5} onChange={e => setChecklist({...checklist, t5: e.target.checked})} className="w-4 h-4 text-slate-900 focus:ring-slate-900" />
-                    <span className={checklist.t4 ? "line-through opacity-50" : ""}>Ist die Kündigung von Spotify erfolgt?</span>
+                    <span className={checklist.t5 ? "line-through opacity-50" : ""}>Gibt es unerwartete oder doppelte Abbuchungen?</span>
                  </label>
                  <label className="flex items-center gap-2 cursor-pointer hover:bg-yellow-200/50 p-1 rounded">
                     <input type="checkbox" checked={checklist.t6} onChange={e => setChecklist({...checklist, t6: e.target.checked})} className="w-4 h-4 text-slate-900 focus:ring-slate-900" />
                     <span className={checklist.t6 ? "line-through opacity-50" : ""}>Ist der aktuelle Kontostand korrekt?</span>
                  </label>
+              </div>
+
+              {/* Notizen unter dem Zettel */}
+              <div className="mt-4 font-sans">
+                <label className="block text-xs uppercase tracking-wider font-bold mb-1 text-slate-800">Notizen (Fehler / Besonderheiten)</label>
+                <textarea 
+                  className="w-full p-3 rounded-lg border border-yellow-300/70 bg-yellow-50/60 placeholder-slate-500 text-slate-900 focus:outline-none focus:ring-2 focus:ring-yellow-400 min-h-[84px]"
+                  placeholder="Meine Notizen..."
+                  value={statementNotes}
+                  onChange={(e) => setStatementNotes(e.target.value)}
+                />
               </div>
 
               <div className="mt-6 text-center font-sans">

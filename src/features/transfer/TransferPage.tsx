@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useGameStore } from '../../store/gameStore';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, RefreshCw, FileText, Wallet, Check } from 'lucide-react';
+import { ArrowRight, RefreshCw, FileText, Wallet, Check, Info } from 'lucide-react';
 
 export const TransferPage: React.FC = () => {
   const [step, setStep] = useState<'intro' | 'form' | 'success'>('intro');
@@ -59,6 +59,19 @@ export const TransferPage: React.FC = () => {
     }
   };
 
+  const Tooltip: React.FC<{ text: string }> = ({ text }) => (
+    <span className="relative inline-flex items-center group">
+      <Info className="w-4 h-4 text-slate-500 cursor-help" />
+      <span
+        className="pointer-events-none absolute left-1/2 top-full mt-2 -translate-x-1/2 whitespace-nowrap rounded-md bg-slate-800 px-2 py-1 text-[11px] font-sans text-white opacity-0 shadow-lg transition-opacity duration-150 group-hover:opacity-100"
+        style={{ transitionDelay: '300ms' }}
+      >
+        {text}
+        <span className="absolute -top-1 left-1/2 -translate-x-1/2 h-2 w-2 rotate-45 bg-slate-800" />
+      </span>
+    </span>
+  );
+
   return (
     <div className="max-w-4xl mx-auto animate-fade-in py-8">
       {step === 'intro' && (
@@ -87,6 +100,17 @@ export const TransferPage: React.FC = () => {
 
       {step === 'form' && (
         <div className="grid md:grid-cols-2 gap-8 items-start">
+          {/* Story / Context */}
+          <div className="md:col-span-2">
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+              <h3 className="font-bold text-lg mb-2">DJ für die Party</h3>
+              <p className="text-slate-600">
+                Du möchtest einen DJ engagieren, damit die Party so richtig gut wird.
+                Die Rechnung ist eingetroffen – nun musst du sie bezahlen. Übertrage
+                dafür die Daten aus der Rechnung korrekt in den Überweisungsträger.
+              </p>
+            </div>
+          </div>
           {/* Invoice View */}
           <div className="bg-white p-8 shadow-sm border border-slate-200 min-h-[400px] text-sm relative paper-texture">
              <div className="absolute top-0 right-0 w-16 h-16 bg-slate-100" style={{clipPath: 'polygon(0 0, 100% 0, 100% 100%)'}}></div>
@@ -150,7 +174,10 @@ export const TransferPage: React.FC = () => {
                   <div className="absolute top-0 left-0 w-2 h-full bg-red-500 rounded-l-lg"></div>
 
                   <div className="pl-4">
-                    <label className="block text-xs font-sans text-red-600 mb-1 uppercase font-bold">Begünstigter (Empfänger)</label>
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="block text-xs font-sans text-red-600 uppercase font-bold">Begünstigter (Empfänger)</label>
+                      <Tooltip text="Name oder Firmenname des Empfängers laut Rechnung." />
+                    </div>
                     <input 
                       value={recipient}
                       onChange={e => setRecipient(e.target.value)}
@@ -159,20 +186,25 @@ export const TransferPage: React.FC = () => {
                   </div>
 
                   <div className="pl-4">
-                    <label className="block text-xs font-sans text-red-600 mb-1 uppercase font-bold">IBAN</label>
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="block text-xs font-sans text-red-600 uppercase font-bold">IBAN</label>
+                      <Tooltip text="IBAN des Empfängers exakt übernehmen (Leerzeichen egal)." />
+                    </div>
                     <div className="flex gap-2">
                       <span className="p-2 bg-slate-100 border border-red-200 font-bold">DE</span>
                       <input 
                         value={iban}
                         onChange={e => setIban(e.target.value)}
-                        placeholder="89..."
                         className="w-full bg-white border border-red-200 p-2" 
                       />
                     </div>
                   </div>
 
                   <div className="pl-4">
-                    <label className="block text-xs font-sans text-red-600 mb-1 uppercase font-bold">BIC (Optional)</label>
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="block text-xs font-sans text-red-600 uppercase font-bold">BIC (Optional)</label>
+                      <Tooltip text="Optional: Nur eintragen, wenn auf der Rechnung angegeben." />
+                    </div>
                     <input 
                       value={bic}
                       onChange={e => setBic(e.target.value)}
@@ -181,26 +213,29 @@ export const TransferPage: React.FC = () => {
                   </div>
 
                   <div className="pl-4">
-                    <label className="block text-xs font-sans text-red-600 mb-1 uppercase font-bold">Betrag (EUR)</label>
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="block text-xs font-sans text-red-600 uppercase font-bold">Betrag (EUR)</label>
+                      <Tooltip text="Betrag in Euro wie auf der Rechnung (Komma oder Punkt)." />
+                    </div>
                     <input 
                       value={amount}
                       onChange={e => setAmount(e.target.value)}
-                      placeholder="80,00"
                       className="w-1/2 bg-white border border-red-200 p-2 text-right" 
                     />
                   </div>
 
                   <div className="pl-4">
-                    <label className="block text-xs font-sans text-red-600 mb-1 uppercase font-bold">Verwendungszweck</label>
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="block text-xs font-sans text-red-600 uppercase font-bold">Verwendungszweck</label>
+                      <Tooltip text="Verwendungszweck kurz halten, z. B. die aufgedruckte Referenz." />
+                    </div>
                     <input 
                       value={reference}
                       onChange={e => setReference(e.target.value)}
-                      placeholder="Rechnungsnummer"
                       maxLength={27}
                       className="w-full bg-white border border-red-200 p-2" 
                     />
                     <input 
-                      placeholder=""
                       disabled
                       className="w-full bg-slate-50 border border-red-200 p-2 mt-1 opacity-50" 
                     />

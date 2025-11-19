@@ -205,7 +205,7 @@ export const OfflineShoppingPage: React.FC = () => {
                   <div>
                     <h2 className="text-xl font-bold mb-2">Die Kaution</h2>
                     <p className="text-slate-600 text-sm">
-                      Der Hausmeister verlangt <strong>50,00 €</strong> Kaution in Bar. 
+                      Du möchtest für deinen Geburtstag einen Raum mieten, um dort deine Party zu feiern. Der Hausmeister verlangt <strong>50,00 €</strong> Kaution in Bar. 
                       Er hat keine Brille dabei und bittet dich, die Quittung für ihn auszufüllen.
                     </p>
                     <p className="mt-2 text-sm text-blue-800 font-medium">
