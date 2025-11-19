@@ -13,7 +13,7 @@ import { ReflectionPage } from './features/reflection/ReflectionPage';
 
 function App() {
   return (
-    <BrowserRouter basename={import.meta.env.BASE_URL}>
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<IntroPage />} />
