@@ -190,14 +190,11 @@ export const TransferPage: React.FC = () => {
                       <label className="block text-xs font-sans text-red-600 uppercase font-bold">IBAN</label>
                       <Tooltip text="IBAN des Empfängers exakt übernehmen (Leerzeichen egal)." />
                     </div>
-                    <div className="flex gap-2">
-                      <span className="p-2 bg-slate-100 border border-red-200 font-bold">DE</span>
-                      <input 
-                        value={iban}
-                        onChange={e => setIban(e.target.value)}
-                        className="w-full bg-white border border-red-200 p-2" 
-                      />
-                    </div>
+                    <input 
+                      value={iban}
+                      onChange={e => setIban(e.target.value)}
+                      className="w-full bg-white border border-red-200 p-2" 
+                    />
                   </div>
 
                   <div className="pl-4">
